@@ -26,7 +26,7 @@ function Search() {
         .then(res => res.json())
         .then(data_weather => {
 
-            let API_UNSPLASH = `https://api.unsplash.com/search/photos?query=${CITY}city,${data_weather.sys.country}&collections=cityscape`
+            let API_UNSPLASH = `https://api.unsplash.com/search/photos?query=${CITY}city,${data_weather.sys.country}&orientation=landscape`
 
             country.setAttribute("src", `https://flagsapi.com/${data_weather.sys.country}/flat/48.png`)
 
@@ -69,7 +69,7 @@ function Search() {
 
         })
         .catch(error => {
-            
+
         })
 
 
