@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
     <title>Weather</title>
 </head>
 <body>
@@ -13,8 +14,8 @@
 
         <span id="title">Confira o clima de qualquer cidade:</span>
         <div class="input">
-            <input  required id="input" type="text" class="input-text" placeholder="Digite aqui:">
-            <input onclick="Search()" type="button" class="input-button">
+            <input autocomplete="off" required id="input" type="text" class="input-text" placeholder="Digite aqui:">
+            <input onclick="Search()" onmousedown="this.style.transform = 'scale(0.9)'" onmouseup="this.style.transform = 'scale(1.0)'"  onmouseleave="this.style.transform = 'scale(1.0)'" type="button" class="input-button">
         </div>
         <div class="container-city">
             <img class="icon-location" src="./imgs/location.png" alt="">
