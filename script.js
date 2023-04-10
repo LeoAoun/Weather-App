@@ -19,6 +19,7 @@ document.querySelector("footer").style.display = "none"
 
 function Search() {
     let CITY = input.value
+    if(!CITY) return
     let API_WEATHER = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${KEY_WEATHER}&units=${UNITS}&lang=pt_br`;
 
     fetch(API_WEATHER)
