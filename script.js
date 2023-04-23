@@ -1,5 +1,5 @@
 const KEY_WEATHER = 'cacd3faee9c8c4652fa654dc862d6fb3'
-const KEY_UNSPLASH = "bFdu79vocJNexzGNn88nDr5702N99E1hEorGALTI55A";
+const KEY_PIXABAY = "35690287-8c3c7b66508c0a4021d6a3276"
 const UNITS = 'metric'
 
 const input = document.querySelector("#input")
@@ -20,27 +20,23 @@ document.querySelector("footer").style.display = "none"
 function Search() {
     let CITY = input.value
     if(!CITY) return
-    let API_WEATHER = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${KEY_WEATHER}&units=${UNITS}&lang=pt_br`;
+    let API_WEATHER = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${KEY_WEATHER}&units=${UNITS}&lang=pt_br`
 
     fetch(API_WEATHER)
         .then(res => res.json())
         .then(data_weather => {
 
-            let API_UNSPLASH = `https://api.unsplash.com/search/photos?query=${CITY}city,${data_weather.sys.country}&orientation=landscape`
+            let API_PIXABAY = `https://pixabay.com/api/?key=${KEY_PIXABAY}&q=${CITY}%2Ccity&category=travel&image_type=photo`
 
             country.setAttribute("src", `https://flagsapi.com/${data_weather.sys.country}/flat/48.png`)
 
-            fetch(API_UNSPLASH, {
-                headers: {
-                    Authorization: `Client-ID ${KEY_UNSPLASH}`
-                }
-            })
+            fetch(API_PIXABAY)
                 .then(res => res.json())
-                .then(data_unsplash => {
-                    const randomIndex = Math.floor(Math.random() * data_unsplash.results.length);
-                    const imageUrl = data_unsplash.results[randomIndex].urls.regular;
-
-                    const body = document.querySelector('body');
+                .then(data_pixabay => {
+                    const randomIndex = Math.floor(Math.random() * data_pixabay.hits.length)
+                    const imageUrl = data_pixabay.hits[randomIndex].webformatURL;
+                    const body = document.querySelector('body')
+                    
                     body.style.backgroundImage = `url('${imageUrl}')`
                     body.style.backgroundPosition = "center"
                     body.style.backgroundSize = "cover"
