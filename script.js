@@ -79,6 +79,11 @@ const textContent = (data_weather, description) => {
   wind.textContent = data_weather.wind.speed + " km/h";
 };
 
+// Event listener for the search button and the Enter key
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") Search();
+});
+
 // Search for the city
 const Search = async () => {
   let CITY = input.value;
