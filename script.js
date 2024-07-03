@@ -83,6 +83,7 @@ const textContent = (data_weather, description) => {
 const Search = async () => {
   let CITY = input.value;
   if (!CITY) return;
+  input.value = "";
 
   try {
     let data_weather = await dataWeather(CITY);
