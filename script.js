@@ -1,78 +1,106 @@
-const KEY_WEATHER = 'cacd3faee9c8c4652fa654dc862d6fb3'
-const KEY_PIXABAY = "35690287-8c3c7b66508c0a4021d6a3276"
-const UNITS = 'metric'
+const KEY_WEATHER = "cacd3faee9c8c4652fa654dc862d6fb3";
+const KEY_UNSPLASH = "bFdu79vocJNexzGNn88nDr5702N99E1hEorGALTI55A";
+const UNITS = "metric";
 
-const input = document.querySelector("#input")
-const city = document.querySelector("#city")
-const country = document.querySelector("#country")
-const temperature = document.querySelector("#temperature")
-const weather = document.querySelector("#weather")
-const icon_weather = document.querySelector("#icon-weather")
-const humidity = document.querySelector("#humidity")
-const wind = document.querySelector("#wind")
+const body = document.querySelector("body");
+const input = document.querySelector("#input");
+const city = document.querySelector("#city");
+const country = document.querySelector("#country");
+const temperature = document.querySelector("#temperature");
+const weather = document.querySelector("#weather");
+const icon_weather = document.querySelector("#icon-weather");
+const humidity = document.querySelector("#humidity");
+const wind = document.querySelector("#wind");
 
-document.querySelector(".container-city").style.display = "none"
-document.querySelector(".container-weather").style.display = "none"
+// This async function returns a promise that resolves to the data returned by the API.
+const dataWeather = async (CITY) => {
+  let API_WEATHER = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${KEY_WEATHER}&units=${UNITS}&lang=pt_br`;
+  let resWeather = await fetch(API_WEATHER);
+  if (!resWeather.ok) throw new Error("City not found");
+  let data_weather = await resWeather.json();
+  return data_weather;
+};
 
-document.querySelector("footer").style.display = "none"
+// This async function returns a promise that resolves to the data returned by the API.
+const dataUnsplash = async (encodedCity) => {
+  let API_UNSPLASH = `https://api.unsplash.com/search/photos?query=${encodedCity}&client_id=${KEY_UNSPLASH}`;
+  let resUnsplash = await fetch(API_UNSPLASH);
+  if (!resUnsplash.ok) throw new Error("Error to load image");
+  let data_unsplash = await resUnsplash.json();
+  return data_unsplash;
+};
 
+// This function returns the URL of the flag icon
+const iconFlag = (data_weather) => {
+  let API_FLAG = `https://flagsapi.com/${data_weather.sys.country}/flat/64.png`;
+  return API_FLAG;
+};
 
-function Search() {
-    let CITY = input.value
-    if(!CITY) return
-    let API_WEATHER = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${KEY_WEATHER}&units=${UNITS}&lang=pt_br`
+// This function returns the URL of the weather icon
+const iconWeather = (data_weather) => {
+  let ICON_WEATHER = `https://openweathermap.org/img/wn/${data_weather.weather[0].icon}@2x.png`;
+  return ICON_WEATHER;
+};
 
-    fetch(API_WEATHER)
-        .then(res => res.json())
-        .then(data_weather => {
+// This function create a new image element to check if the Unsplash image is loaded
+const setBackground = (data_unsplash) => {
+  const randomIndex = Math.floor(Math.random() * data_unsplash.results.length);
+  const imageUrl = data_unsplash.results[randomIndex].urls.full;
+  const img = new Image();
+  img.src = imageUrl;
+  img.onload = () => {
+    body.style.backgroundImage = `url(${imageUrl})`;
+  };
+};
 
-            let API_PIXABAY = `https://pixabay.com/api/?key=${KEY_PIXABAY}&q=${CITY}%2Ccity&category=travel&image_type=photo`
+// Capitalize the first letter of each word in the description
+const descriptionWeather = (description) => {
+  for (let i = 0; i < description.length; i++) {
+    description[i] =
+      description[i].charAt(0).toUpperCase() + description[i].slice(1);
+  }
+};
 
-            country.setAttribute("src", `https://flagsapi.com/${data_weather.sys.country}/flat/48.png`)
+// Display the containers when the search is successful
+const flexContainers = () => {
+  document.querySelector(".container-city").style.display = "flex";
+  document.querySelector(".container-weather").style.display = "flex";
+  document.querySelector("footer").style.display = "flex";
+};
 
-            fetch(API_PIXABAY)
-                .then(res => res.json())
-                .then(data_pixabay => {
-                    const randomIndex = Math.floor(Math.random() * data_pixabay.hits.length)
-                    const imageUrl = data_pixabay.hits[randomIndex].webformatURL;
-                    const body = document.querySelector('body')
-                    
-                    body.style.backgroundImage = `url('${imageUrl}')`
-                    body.style.backgroundPosition = "center"
-                    body.style.backgroundSize = "cover"
-                    body.style.backgroundRepeat = "no-repeat"
-                })
+// Display the text content of the weather data in the HTML elements
+const textContent = (data_weather, description) => {
+  city.textContent = data_weather.name;
+  temperature.textContent = data_weather.main.temp.toFixed(1) + " °C";
+  descriptionWeather(description);
+  weather.textContent = description.join(" ");
+  icon_weather.setAttribute("src", iconWeather(data_weather));
+  humidity.textContent = data_weather.main.humidity + "%";
+  wind.textContent = data_weather.wind.speed + " km/h";
+};
 
-            setTimeout(() => {
-                document.querySelector(".container-city").style.display = "flex"
-                document.querySelector(".container-weather").style.display = "flex"
-                document.querySelector("footer").style.display = "flex"
+// Search for the city
+const Search = async () => {
+  let CITY = input.value;
+  if (!CITY) return;
 
-                city.textContent = data_weather.name
-                temperature.textContent = (data_weather.main.temp).toFixed(1) + " °C"
+  try {
+    let data_weather = await dataWeather(CITY);
+    let encodedCity = encodeURIComponent(
+      CITY + " city " + data_weather.sys.country
+    );
 
-                let description = (data_weather.weather[0].description).split(" ")
-                for (let i = 0; i < description.length; i++) {
-                    description[i] = description[i].charAt(0).toUpperCase() + description[i].slice(1)
-                }
-                weather.textContent = description.join(" ")
-                icon_weather.setAttribute("src", `https://openweathermap.org/img/wn/${data_weather.weather[0].icon}@2x.png`)
+    let data_unsplash = await dataUnsplash(encodedCity);
+    setBackground(data_unsplash);
 
-                humidity.textContent = data_weather.main.humidity + "%"
-                wind.textContent = data_weather.wind.speed + " km/h"
+    let data_flag = iconFlag(data_weather);
+    country.setAttribute("src", data_flag);
 
-            }, 500)
+    flexContainers();
 
-        })
-        .catch(error => {
-
-        })
-
-
-
-
-}
-
-
-
-
+    let description = data_weather.weather[0].description.split(" ");
+    textContent(data_weather, description);
+  } catch (err) {
+    alert(err);
+  }
+};

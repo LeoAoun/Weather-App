@@ -1,45 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
     <title>Weather</title>
-</head>
-<body>
-    
+  </head>
+  <body>
     <div class="container">
+      <span id="title">Confira o clima de qualquer cidade:</span>
 
-        <span id="title">Confira o clima de qualquer cidade:</span>
-        <div class="input">
-            <input autocomplete="off" required id="input" type="text" class="input-text" placeholder="Digite aqui:">
-            <input onclick="Search()" onmousedown="this.style.transform = 'scale(0.9)'" onmouseup="this.style.transform = 'scale(1.0)'"  onmouseleave="this.style.transform = 'scale(1.0)'" type="button" class="input-button">
-        </div>
-        <div class="container-city">
-            <img class="icon-location" src="./imgs/location.png" alt="">
-            <span id="city"></span>
-            <img id="country" src="" alt="">
-        </div>
-        <span id="temperature"></span>
-        <div class="container-weather">
-            <span id="weather"></span>
-            <img id="icon-weather" src="" alt="">
-        </div>
-        <footer>
-            <div class="container-humidity">
-                <img src="imgs/drop.png" alt="">
-                <span id="humidity"></span>
-            </div>
-            <div class="container-wind">
-                <img src="imgs/wind.png" alt="">
-                <span id="wind"></span>
-            </div>
-        </footer>
+      <div class="input">
+        <input
+          autocomplete="off"
+          required
+          id="input"
+          type="text"
+          class="input-text"
+          placeholder="Digite aqui:"
+        />
+        <input
+          onclick="Search()"
+          onmousedown="this.style.transform = 'scale(0.9)'"
+          onmouseup="this.style.transform = 'scale(1.0)'"
+          onmouseleave="this.style.transform = 'scale(1.0)'"
+          type="button"
+          class="input-button"
+        />
+      </div>
 
+      <div class="container-city">
+        <img class="icon-location" src="./imgs/location.png" />
+        <span id="city"></span>
+        <img id="country" src="" />
+      </div>
+      <span id="temperature"></span>
+      <div class="container-weather">
+        <span id="weather"></span>
+        <img id="icon-weather" src="" />
+      </div>
+
+      <footer>
+        <div class="container-humidity">
+          <img src="imgs/drop.png" />
+          <span id="humidity"></span>
+        </div>
+        <div class="container-wind">
+          <img src="imgs/wind.png" />
+          <span id="wind"></span>
+        </div>
+      </footer>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
